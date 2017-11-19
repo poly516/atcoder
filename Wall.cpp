@@ -28,6 +28,7 @@ void dfs(int x,int now,int l){
 		magic=min(magic,now);
 		return ;
 	}
+	if (now>=l) return ; 
 	for (int i=0;i<=9;i++) if (b[i]==0&&i!=x&&c[x][i]<=l){
 		b[i]=1;
 		dfs(i,now+c[x][i],l);
