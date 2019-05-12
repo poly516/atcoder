@@ -1,0 +1,19 @@
+Monsters Battle Royale
+这一题每两个怪物打完后所能得到的最小生命值，为他们两生命值的最大公约数。自然，十万个数据不可能暴力完成。我于是猜想，如果我算出所有怪物的生命值的最大公约
+数，那不就是答案了么？我尝试了一下，然后就成功了。
+代码：
+#include<bits/stdc++.h>
+using namespace std;
+long long n,a[100010],ans;
+long long gcd(long long a, long long b){
+    if(b==0) return a;
+    return gcd(b,a%b);
+}
+int main(){
+	cin>>n;
+	for (long long i=0;i<n;i++) cin>>a[i];
+	ans=a[0];
+	for (int i=1;i<n;i++) ans=gcd(ans,a[i]);
+	cout<<ans<<endl;
+	return 0;
+}
