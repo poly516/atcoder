@@ -1,0 +1,67 @@
+Match Matching
+这题可以通过动态规划来做，每一个点都将路径记录下来，并用以推导下一个点。(v[i]指输入中的数用的火柴棒个数)
+dp[i][j]={dp[i-1][j-v[i]]}(dp[i-1][j-v[i]非空)
+         {dp[i][j-v[i]]}(dp[i-1][j-v[i]为空，但j是v[i]的倍数)
+         {dp[i-1][j]}(上面两个皆不成立)
+在最后，将算出来的每一个找出，然后进行比对，找出最大的一个。
+代码:
+#include<bits/stdc++.h>
+using namespace std;
+struct node{
+	int a[10];
+};
+int x[]={0,2,5,5,4,5,6,3,7,6},n,m,a[10];
+node dp[10][10000];
+vector<int> v;
+vector<string> s;
+int main(){
+	cin>>n>>m;
+	for (int i=0;i<m;i++) cin>>a[i];
+	for (int i=0;i<m;i++) v.push_back(x[a[i]]);
+	v.push_back(0);
+	sort(v.begin(),v.end());
+	v.erase(unique(v.begin(),v.end()),v.end());
+	for (int i=1;i<v.size();i++)
+		for (int j=v[i];j<=n;j++){
+			int f=0;
+			dp[i][j]=dp[i-1][j];
+			for (int k=0;k<6;k++) if (dp[i-1][j-v[i]].a[k]!=0) f=1;
+			if (f==0&&j%v[i]==0){
+				dp[i][j]=dp[i][j-v[i]];
+				dp[i][j].a[i-1]++;
+			}
+			if (f==1){
+				dp[i][j]=dp[i-1][j-v[i]];
+				dp[i][j].a[i-1]++;
+			}
+		}
+	for (int i=1;i<v.size();i++)
+		for (int j=0;j<6;j++)
+			if (dp[i][n].a[j]!=0){
+				string zzz="";
+				for (int l=1;l<v.size();l++)
+					for (int k=0;k<m;k++)
+						if (x[a[k]]==v[l]){
+							for (int t=0;t<dp[i][n].a[l-1];t++) zzz+=char('0'+a[k]);
+							break;
+					}
+				sort(zzz.begin(),zzz.end());
+				reverse(zzz.begin(),zzz.end());
+				s.push_back(zzz);
+				break;
+			}
+	string ans=s[0];
+	for (int i=1;i<s.size();i++){
+		if (ans.size()<s[i].size()) ans=s[i];
+		if (ans.size()==s[i].size())
+			for (int j=0;j<s[i].size();j++){
+				if (ans[j]<s[i][j]){
+					ans=s[i];
+					break;
+				}
+				if (ans[j]>s[i][j]) break;
+			}
+	}
+	cout<<ans<<endl;
+	return 0;
+}
